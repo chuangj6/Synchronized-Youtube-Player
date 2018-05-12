@@ -1,7 +1,7 @@
 {
   "name": "node-js-template",
   "version": "1.0.0",
-  "description": "joma's template",
+  "description": "jasons template",
   "main": "index.js",
   "dependencies": {
     "ejs": "^2.5.9",
@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jomaoppa/node-js-template.git"
+    "url": "https://github.uci.edu/CHUANGJ6/Projectweb"
   },
   "keywords": [
     "node"
   ],
-  "author": "Joma",
+  "author": "Jason",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jomaoppa/node-js-template/issues"
+    "url": "https://github.uci.edu/CHUANGJ6/Projectweb"
   },
-  "homepage": "https://github.com/jomaoppa/node-js-template#readme"
+  "https://github.uci.edu/CHUANGJ6/Projectweb/blob/master/README.md
 }

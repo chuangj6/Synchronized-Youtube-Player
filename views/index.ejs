@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Jason's doggy daycare test</title>
+    <title>Jason's Twice</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -45,11 +45,102 @@
     </nav>
 
     <div class="container">
+      <div class = 'center'>
+      <body>
+      <!-- //start of youtube video !!!******!!!!!!! -->
+    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="player"></div>
+
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '480',
+          width: '720',
+          playerVars: {'autoplay':1,'controls':1,'showinfo':1,'list':'PLJSYV4jabimtRUR76Xxo5TWw-sCSzaVVm', 'listType':'playlist'},
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+
+      }
+
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      player.setLoop(true);
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+      function play(){
+        player.playVideo();
+      }
+      function pause(){
+        player.pauseVideo();
+      }
+    </script>
+  </body>
+
+<div class = 'box2'>
+  <div class = 'boxcontainer'>
+    <img src  = "play.png" alt ="play button" class = 'resize' onclick ="play()" >
+    <img src  = "pause.jpeg" alt ="pause button" class = 'resize' onclick ="pause()">
+  </div>
+    <div class = "box">
+    <div id="myProgress">
+  <div id="myBar"></div>
+  </div>
+</div>
+</div>
+
+
+<br>
+<button onclick="move()">Click Me</button>
+
+<script>
+function move() {
+  var elem = document.getElementById("myBar");
+  var width = 1;
+  var id = setInterval(frame, 10);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+    } else {
+      width++;
+      elem.style.width = width + '%';
+    }
+  }
+}
+</script>
+</div>
+</div>
 
       <div class="starter-template">
-        <h1>Jason is cool</h1>
-        <img id="headshot" src="mountain-dog.jpg" alt="Dog picture">
-        <p class="lead">He will never get a girlfriend.<br> Not with that face.</p>
+        <h1>IRISH IS LAME</h1>
+        <img id="headshot" src="iu.jpg" alt=" IU picture <3">
+        <p class="lead">Cute Grill<br> SMILE</p>
       </div>
 
     </div><!-- /.container -->

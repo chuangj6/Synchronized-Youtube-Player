@@ -8,3 +8,53 @@ body {
 #headshot {
     width: 500px;
 }
+
+#player{
+    margin-top: 50px;
+    display:relative;
+}
+.center{
+  align:center;
+}
+
+div.boxcontainer {
+    align:left !important;
+    width:95px;
+    border: 3px solid black;
+    position:relative;
+}
+div.box2{
+  align:left;
+  height:50px;
+  float:left;
+display:flex;
+}
+
+
+div.box{
+  width: 630px;
+  border:3px solid black;
+}
+
+img.resize{
+  align:left !important;
+  height:40px;
+  width: 40px;
+  cursor:pointer;
+}
+#myProgress {
+    width: 100%;
+    align:left!important;
+    display:inline;
+    background-color: grey;
+    overflow:hidden;
+
+}
+#myBar {
+    width: 1%;
+    height: 40px;
+    background-color: green;
+    align:left!important;
+    overflow:hidden;
+
+}
