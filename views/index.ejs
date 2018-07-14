@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Jason's Twice</title>
+    <title>Jason's IU</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -23,26 +23,7 @@
 
   <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#wan">Button1</a></li>
-            <li><a href="#too">Button2</a></li>
-            <li><a href="#phree">Button3</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+    <% include header.ejs%>
 
     <div class="container">
       <div class = 'center'>
@@ -50,10 +31,14 @@
       <!-- //start of youtube video !!!******!!!!!!! -->
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
-
+    <script src="/socket.io/socket.io.js"></script>
     <script>
+    //var socket = io();
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
+      var time_total;
+      //bar = document.getElementById("myBar");
+      //bar.addEventListener('click', clickedBar,false);
 
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -66,26 +51,98 @@
         player = new YT.Player('player', {
           height: '480',
           width: '720',
-          playerVars: {'autoplay':1,'controls':1,'showinfo':1,'list':'PLJSYV4jabimtRUR76Xxo5TWw-sCSzaVVm', 'listType':'playlist'},
+          playerVars: {'autoplay':1,'controls':0,'showinfo':1,'list':'PLJSYV4jabimtRUR76Xxo5TWw-sCSzaVVm', 'listType':'playlist'},
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
           }
         });
-
+        box = document.getElementById("box").addEventListener('click',clickedBox,false);
       }
+      var socket = io();
+      socket.on('settime',function(msg){
+        player.seekTo(msg, true);
+      })
+      function clickedBox(event){
+        var x = event.offsetX;
+        var length = document.getElementById('box').offsetWidth;
+        var percent = event.offsetX / this.offsetWidth;
+        player.seekTo(percent * player.getDuration(), true);
+        socket.emit('time', percent*player.getDuration());
 
+        //this.value = percent / 100;
+      }
 
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
         event.target.playVideo();
+        time_total = convert(player.getCurrentTime(),1);
+        /*var progress = document.getElementById("myBar").addEventListener("click", function (e) {
+          var x = e.pageX - this.offsetLeft, // or e.offsetX (less support, though)
+          //var y = e.pageY - this.offsetTop,  // or e.offsetY
+          clickedValue = x * this.max / this.offsetWidth;
+
+    console.log(x, y);
+});*/
+        loop();
       }
+
+      function convert(seconds, minus1){
+        var mins    = (seconds>=60) ?Math.round(seconds/60):0;
+        var secs    = (seconds%60!=0) ?Math.round(seconds%60):0;
+        var secs    = (minus1==true) ?(secs-1):secs; //Youtube always displays 1 sec less than its duration time!!! Then we have to set minus1 flag to true for converting player.getDuration()
+        var time    = mins + ":" + ((secs<10)?"0"+secs:secs);
+        return time;
+      }
+      //var progress = document.getElementById("myBar");
+      //progress.addEventListener("click",jump,false);
+
+      function loop(){
+        var current_time = convert(player.getCurrentTime(), 0);
+        //var progress = document.getElementById("myBar");
+      //  console.log(current_time);
+      //  progress.addEventListener('click',jump(event));
+        var time_total = player.getDuration();
+        document.getElementById("myBar").style.width = (player.getCurrentTime()/player.getDuration())*100+"%";
+        console.log( current_time + " / " + time_total);
+
+
+        timeout_setter = setTimeout(loop, 1000);
+      }
+
+      /*function jump(e){
+        var x = e.pageX - this.offsetLeft, // or e.offsetX (less support, though)
+        y = e.pageY - this.offsetTop,  // or e.offsetY
+      clickedValue = x * this.max / this.offsetWidth,
+      isClicked = clickedValue <= this.value;
+
+      if (isClicked) {
+      alert('You clicked within the value range at: ' + clickedValue);
+  }
+}*/
+
+
+
+      /*function move() {
+        var elem = document.getElementById("myBar");
+        var width = 1;
+        var id = setInterval(frame, 10);
+        function frame() {
+          if (width >= 100) {
+            clearInterval(id);
+          } else {
+            width++;
+            elem.style.width = width + '%';
+          }
+        }*/
+
+
 
       // 5. The API calls this function when the player's state changes.
       //    The function indicates that when playing a video (state=1),
       //    the player should play for six seconds and then stop.
       var done = false;
-      player.setLoop(true);
+      //player.setLoop(true);
       function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING && !done) {
           done = true;
@@ -100,40 +157,22 @@
       function pause(){
         player.pauseVideo();
       }
+
+
+
     </script>
   </body>
-
 <div class = 'box2'>
   <div class = 'boxcontainer'>
-    <img src  = "play.png" alt ="play button" class = 'resize' onclick ="play()" >
-    <img src  = "pause.jpeg" alt ="pause button" class = 'resize' onclick ="pause()">
+    <img src  = "play.png" alt ="play button" onclick ="play()" id = 'play' >
+    <img src  = "pause.jpeg" alt ="pause button" onclick ="pause()" id = 'pause'>
   </div>
-    <div class = "box">
+    <div  id= "box">
     <div id="myProgress">
   <div id="myBar"></div>
   </div>
 </div>
 </div>
-
-
-<br>
-<button onclick="move()">Click Me</button>
-
-<script>
-function move() {
-  var elem = document.getElementById("myBar");
-  var width = 1;
-  var id = setInterval(frame, 10);
-  function frame() {
-    if (width >= 100) {
-      clearInterval(id);
-    } else {
-      width++;
-      elem.style.width = width + '%';
-    }
-  }
-}
-</script>
 </div>
 </div>
 
@@ -146,6 +185,7 @@ function move() {
     </div><!-- /.container -->
 
 
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -154,3 +194,40 @@ function move() {
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+/**$(function(){
+  var socket = io();
+  $('#play').play();
+  soket.emit("play")
+})**/
+var socket = io();
+var playButton= $('#play');
+var pauseButton = $('#pause');
+function play(){
+  player.playVideo();
+  socket.emit('playerEvent', 'play');
+  console.log("im playing");
+
+}
+function pause(){
+  player.pauseVideo();
+  socket.emit('playerEvent', 'pause');
+  console.log("im pausing");
+}
+  console.log('into the sockets');
+  socket.on('play/pause',function(msg){
+    if (msg == "play"){
+      console.log("recieved event;");
+      player.playVideo();
+    }
+    else {
+      player.pauseVideo();
+    }
+    }
+  )
+
+
+    //this.value = percent / 100;
+
+</script>
